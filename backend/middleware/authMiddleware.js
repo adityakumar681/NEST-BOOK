@@ -4,8 +4,12 @@ const AppError = require("../utils/AppError");
 
 const authMiddleware = async (req, res, next) => {
   try {
-    // Get JWT token from HTTP-only cookie
-    const token = req.cookies.token;
+    const authorization = req.headers.authorization;
+    const bearerToken =
+      authorization?.startsWith("Bearer ")
+        ? authorization.slice("Bearer ".length)
+        : null;
+    const token = bearerToken || req.cookies.token;
 
     if (!token) {
       return next(new AppError("Please login first", 401));
