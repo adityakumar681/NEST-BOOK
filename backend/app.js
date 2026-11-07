@@ -15,7 +15,11 @@ app.use(helmet());
 // Frontend-backend communication
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: process.env.FRONTEND_URL || (
+      process.env.NODE_ENV === "production"
+        ? "https://book-nest-rose.vercel.app"
+        : "http://localhost:3000"
+    ),
     credentials: true,
   })
 );
